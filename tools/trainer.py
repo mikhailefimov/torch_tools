@@ -115,7 +115,7 @@ class LogSection:
         """
         Call this method after each step in process.
         Step counter will be incremented.
-        All metrics updates afterwards will be related to next step.
+        Afterwards all metrics updates will be related to the next step.
         """
         if self.log_time:
             total_time = time.monotonic() - self.start_time
@@ -535,7 +535,7 @@ class Trainer:
                 size of minibatch for evaluation and precition (default =batch_size)
             dataloader_factory ((dataset, train, batch_size)->DataLoader):
                 custom replacement for model.dataloader_factory
-            outdir (str):
+            outdir (str or None):
                 directory for checkpoints, if None - checkpoints are disabled
             start_from_checkpoint (str):
                 filename of checkpoint to start from

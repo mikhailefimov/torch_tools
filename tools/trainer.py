@@ -121,7 +121,7 @@ class LogSection:
             total_time = time.monotonic() - self.start_time
             self.update(total_time=total_time)
             if self.total is not None:
-                self.update(eta_time=total_time / (self.cur_step + 1) * (self.total - self.cur_step))
+                self.update(eta_time=total_time / (self.cur_step + 1) * (self.total - self.cur_step-1))
         self.cur_step += 1
         for name, metric in self.metrics.items():
             del metric[self.cur_step:]

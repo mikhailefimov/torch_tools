@@ -4,7 +4,16 @@ from unittest import TestCase, mock
 from tools.trainer import Logger
 
 
-@mock.patch('time.monotonic', mock.MagicMock(return_value=42))
+class TimeMock:
+    _mocked_timer = 1
+
+    @staticmethod
+    def mock_time():
+        TimeMock._mocked_timer += 1
+        return TimeMock._mocked_timer
+
+
+@mock.patch('time.monotonic', mock.MagicMock(side_effect=TimeMock.mock_time))
 class TestLogger(TestCase):
 
     def log_some_data(self, header, acc_odd):
@@ -20,17 +29,17 @@ class TestLogger(TestCase):
     def test_logger_no_header(self):
         s = self.log_some_data("", acc_odd=0)
         self.assertEqual(s, (
-            "train	[ 2/20]	(0:00:00<=0:00:00s)	loss:0.010, accuracy:None\n"
-            "train	[ 4/20]	(0:00:00<=0:00:00s)	loss:0.030, accuracy:None\n"
-            "train	[ 6/20]	(0:00:00<=0:00:00s)	loss:0.050, accuracy:None\n"
-            "train	[ 8/20]	(0:00:00<=0:00:00s)	loss:0.070, accuracy:None\n"
-            "train	[10/20]	(0:00:00<=0:00:00s)	loss:0.090, accuracy:None\n"
-            "train	[12/20]	(0:00:00<=0:00:00s)	loss:0.110, accuracy:None\n"
-            "train	[14/20]	(0:00:00<=0:00:00s)	loss:0.130, accuracy:None\n"
-            "train	[16/20]	(0:00:00<=0:00:00s)	loss:0.150, accuracy:None\n"
-            "train	[18/20]	(0:00:00<=0:00:00s)	loss:0.170, accuracy:None\n"
-            "train	[20/20]	(0:00:00<=0:00:00s)	loss:0.190, accuracy:None\n"
-            " Total time: 0:00:00 (0.0000 s / it)\n"))
+            "train	[ 2/20]	(0:00:02<=0:00:18s)	loss:0.010, accuracy:None\n"
+            "train	[ 4/20]	(0:00:04<=0:00:16s)	loss:0.030, accuracy:None\n"
+            "train	[ 6/20]	(0:00:06<=0:00:14s)	loss:0.050, accuracy:None\n"
+            "train	[ 8/20]	(0:00:08<=0:00:12s)	loss:0.070, accuracy:None\n"
+            "train	[10/20]	(0:00:10<=0:00:10s)	loss:0.090, accuracy:None\n"
+            "train	[12/20]	(0:00:12<=0:00:08s)	loss:0.110, accuracy:None\n"
+            "train	[14/20]	(0:00:14<=0:00:06s)	loss:0.130, accuracy:None\n"
+            "train	[16/20]	(0:00:16<=0:00:04s)	loss:0.150, accuracy:None\n"
+            "train	[18/20]	(0:00:18<=0:00:02s)	loss:0.170, accuracy:None\n"
+            "train	[20/20]	(0:00:20<=0:00:00s)	loss:0.190, accuracy:None\n"
+            " Total time: 0:00:20 (1.0000 s / it)\n"))
 
     def test_logger_with_header(self):
         s = self.log_some_data("Evaluating model", acc_odd=1)
@@ -38,17 +47,17 @@ class TestLogger(TestCase):
             "------------------------------\n"
             "Evaluating model\n"
             "------------------------------\n"
-            "train	[ 2/20]	(0:00:00<=0:00:00s)	loss:0.010, accuracy:0.05\n"
-            "train	[ 4/20]	(0:00:00<=0:00:00s)	loss:0.030, accuracy:0.15\n"
-            "train	[ 6/20]	(0:00:00<=0:00:00s)	loss:0.050, accuracy:0.25\n"
-            "train	[ 8/20]	(0:00:00<=0:00:00s)	loss:0.070, accuracy:0.35\n"
-            "train	[10/20]	(0:00:00<=0:00:00s)	loss:0.090, accuracy:0.45\n"
-            "train	[12/20]	(0:00:00<=0:00:00s)	loss:0.110, accuracy:0.55\n"
-            "train	[14/20]	(0:00:00<=0:00:00s)	loss:0.130, accuracy:0.65\n"
-            "train	[16/20]	(0:00:00<=0:00:00s)	loss:0.150, accuracy:0.75\n"
-            "train	[18/20]	(0:00:00<=0:00:00s)	loss:0.170, accuracy:0.85\n"
-            "train	[20/20]	(0:00:00<=0:00:00s)	loss:0.190, accuracy:0.95\n"
-            "Evaluating model Total time: 0:00:00 (0.0000 s / it)\n"))
+            "train	[ 2/20]	(0:00:02<=0:00:18s)	loss:0.010, accuracy:0.05\n"
+            "train	[ 4/20]	(0:00:04<=0:00:16s)	loss:0.030, accuracy:0.15\n"
+            "train	[ 6/20]	(0:00:06<=0:00:14s)	loss:0.050, accuracy:0.25\n"
+            "train	[ 8/20]	(0:00:08<=0:00:12s)	loss:0.070, accuracy:0.35\n"
+            "train	[10/20]	(0:00:10<=0:00:10s)	loss:0.090, accuracy:0.45\n"
+            "train	[12/20]	(0:00:12<=0:00:08s)	loss:0.110, accuracy:0.55\n"
+            "train	[14/20]	(0:00:14<=0:00:06s)	loss:0.130, accuracy:0.65\n"
+            "train	[16/20]	(0:00:16<=0:00:04s)	loss:0.150, accuracy:0.75\n"
+            "train	[18/20]	(0:00:18<=0:00:02s)	loss:0.170, accuracy:0.85\n"
+            "train	[20/20]	(0:00:20<=0:00:00s)	loss:0.190, accuracy:0.95\n"
+            "Evaluating model Total time: 0:00:20 (1.0000 s / it)\n"))
 
     def test_custom_section(self):
         logger = Logger()
@@ -64,17 +73,17 @@ class TestLogger(TestCase):
             "------------------------------\n"
             "Custom log block\n"
             "------------------------------\n"
-            "custom	[1/?]	(0:00:00s)\n"
-            "custom	[2/?]	(0:00:00s)\n"
-            "custom	[3/?]	(0:00:00s)\n"
-            "custom	[4/?]	(0:00:00s)\n"
-            "custom	[5/?]	(0:00:00s)\n"
-            "custom	[6/?]	(0:00:00s)\n"
-            "custom	[7/?]	(0:00:00s)\n"
-            "custom	[8/?]	(0:00:00s)\n"
-            "custom	[9/?]	(0:00:00s)\n"
-            "custom	[10/?]	(0:00:00s)\n"
-            "Custom log block Total time: 0:00:00 (0.0000 s / it)\n"))
+            "custom	[1/?]	(0:00:01s)\n"
+            "custom	[2/?]	(0:00:02s)\n"
+            "custom	[3/?]	(0:00:03s)\n"
+            "custom	[4/?]	(0:00:04s)\n"
+            "custom	[5/?]	(0:00:05s)\n"
+            "custom	[6/?]	(0:00:06s)\n"
+            "custom	[7/?]	(0:00:07s)\n"
+            "custom	[8/?]	(0:00:08s)\n"
+            "custom	[9/?]	(0:00:09s)\n"
+            "custom	[10/?]	(0:00:10s)\n"
+            "Custom log block Total time: 0:00:10 (1.0000 s / it)\n"))
 
     def test_logger_persistence(self):
         logger = Logger()
@@ -102,32 +111,32 @@ class TestLogger(TestCase):
             loaded_logger.print_logs(2, file=out)
             s = out.getvalue()
             self.assertEqual(s, (
-                "train	[ 2/20]	(0:00:00<=0:00:00s)	loss:0.010, accuracy:0.05\n"
-                "train	[ 4/20]	(0:00:00<=0:00:00s)	loss:0.030, accuracy:0.15\n"
-                "train	[ 6/20]	(0:00:00<=0:00:00s)	loss:0.050, accuracy:0.25\n"
-                "train	[ 8/20]	(0:00:00<=0:00:00s)	loss:0.070, accuracy:0.35\n"
-                "train	[10/20]	(0:00:00<=0:00:00s)	loss:0.090, accuracy:0.45\n"
-                "train	[12/20]	(0:00:00<=0:00:00s)	loss:0.110, accuracy:0.55\n"
-                "train	[14/20]	(0:00:00<=0:00:00s)	loss:0.130, accuracy:0.65\n"
-                "train	[16/20]	(0:00:00<=0:00:00s)	loss:0.150, accuracy:0.75\n"
-                "train	[18/20]	(0:00:00<=0:00:00s)	loss:0.170, accuracy:0.85\n"
-                "train	[20/20]	(0:00:00<=0:00:00s)	loss:0.190, accuracy:0.95\n"
-                " Total time: 0:00:00 (0.0000 s / it)\n"
+                "train	[ 2/20]	(0:00:02<=0:00:18s)	loss:0.010, accuracy:0.05\n"
+                "train	[ 4/20]	(0:00:04<=0:00:16s)	loss:0.030, accuracy:0.15\n"
+                "train	[ 6/20]	(0:00:06<=0:00:14s)	loss:0.050, accuracy:0.25\n"
+                "train	[ 8/20]	(0:00:08<=0:00:12s)	loss:0.070, accuracy:0.35\n"
+                "train	[10/20]	(0:00:10<=0:00:10s)	loss:0.090, accuracy:0.45\n"
+                "train	[12/20]	(0:00:12<=0:00:08s)	loss:0.110, accuracy:0.55\n"
+                "train	[14/20]	(0:00:14<=0:00:06s)	loss:0.130, accuracy:0.65\n"
+                "train	[16/20]	(0:00:16<=0:00:04s)	loss:0.150, accuracy:0.75\n"
+                "train	[18/20]	(0:00:18<=0:00:02s)	loss:0.170, accuracy:0.85\n"
+                "train	[20/20]	(0:00:20<=0:00:00s)	loss:0.190, accuracy:0.95\n"
+                " Total time: 0:00:20 (1.0000 s / it)\n"
                 "------------------------------\n"
                 "Evaluating model\n"
                 "------------------------------\n"
-                "eval	[ 2/10]	(0:00:00<=0:00:00s)	loss:0.010, accuracy:None\n"
-                "eval	[ 4/10]	(0:00:00<=0:00:00s)	loss:0.030, accuracy:None\n"
-                "eval	[ 6/10]	(0:00:00<=0:00:00s)	loss:0.050, accuracy:None\n"
-                "eval	[ 8/10]	(0:00:00<=0:00:00s)	loss:0.070, accuracy:None\n"
-                "eval	[10/10]	(0:00:00<=0:00:00s)	loss:0.090, accuracy:None\n"
-                "Evaluating model Total time: 0:00:00 (0.0000 s / it)\n"
+                "eval	[ 2/10]	(0:00:02<=0:00:08s)	loss:0.010, accuracy:None\n"
+                "eval	[ 4/10]	(0:00:04<=0:00:06s)	loss:0.030, accuracy:None\n"
+                "eval	[ 6/10]	(0:00:06<=0:00:04s)	loss:0.050, accuracy:None\n"
+                "eval	[ 8/10]	(0:00:08<=0:00:02s)	loss:0.070, accuracy:None\n"
+                "eval	[10/10]	(0:00:10<=0:00:00s)	loss:0.090, accuracy:None\n"
+                "Evaluating model Total time: 0:00:10 (1.0000 s / it)\n"
                 "------------------------------\n"
                 "Custom log block\n"
                 "------------------------------\n"
-                "custom	[2/?]	(0:00:00s)\n"
-                "custom	[4/?]	(0:00:00s)\n"
-                "custom	[6/?]	(0:00:00s)\n"
-                "custom	[8/?]	(0:00:00s)\n"
-                "custom	[10/?]	(0:00:00s)\n"
-                "Custom log block Total time: 0:00:00 (0.0000 s / it)\n"))
+                "custom	[2/?]	(0:00:02s)\n"
+                "custom	[4/?]	(0:00:04s)\n"
+                "custom	[6/?]	(0:00:06s)\n"
+                "custom	[8/?]	(0:00:08s)\n"
+                "custom	[10/?]	(0:00:10s)\n"
+                "Custom log block Total time: 0:00:10 (1.0000 s / it)\n"))
